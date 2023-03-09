@@ -1,310 +1,196 @@
-# Phase 1 Project Description
+![Microsoft-Studios](images/microsoft-studios-banner.png)
 
-You've made it all the way through the first phase of this course - take a minute to celebrate your awesomeness!
+# **Microsoft Movie Studio EDA** ([James Wainaina](/home/james/Downloads/Karugu/Microsoft-Movie-Studio-EDA/README.md))
 
-![awesome](https://raw.githubusercontent.com/learn-co-curriculum/dsc-phase-1-project-v2-4/master/awesome.gif)
+> This project is a part of the [Data Science (DSF-FT) Course](https://moringaschool.com/courses/data-science-course/) at [Moringa School](https://moringaschool.com/). The full project description can be found [here](https://github.com/learn-co-curriculum/dsc-phase-1-project-v2-4).
 
-Now you will put your new skills to use with a large end-of-Phase project!
+---
+---
 
-In this project description, we will cover:
+## Overview
 
-* [***Project Overview:***](#project-overview) the project goal, audience, and dataset
-* [***Deliverables:***](#deliverables) the specific items you are required to produce for this project
-* [***Grading:***](#grading) how your project will be scored
-* [***Getting Started:***](#getting-started) guidance for how to begin your first project
+* Following the creation of movie studio, we have been tasked by Microsoft, who have no idea about making films, to identify what makes a film perform well at the box office. After identifying return on investment (RoI) as the primary metric of success, we narrowed down the datasets provided to the top 200 most grossing movies worldwide then calculated the RoI for each. After plotting several scatter and bar plots comparing runtime, production budget, gross revenue, release date, genre, directors, writers, and rating, the analysis identified the following:
+  * The best time to release a film is during Summer.
+  * Films directed by Kyle Balda, Pierre Coffin, Chris Rennaud, David F. Sandberg, and James Wan perform the best, whereas those Gary Dauberman were the most successful of all the other writers.
+  * Lastly we that length of a film, gross revenue and rating, and have no impact on the RoI of a film.
 
-## Project Overview
+---
 
-For this project, you will use exploratory data analysis to generate insights for a business stakeholder.
+### 1. Business Problem
 
-### Business Problem
+* Microsoft has decided to enter the original video content scene by creating a new movie studio. However, they don't know anything about creating movies. In order to solve this problem, the analysis shall be centered around answering the following question:
 
-Microsoft sees all the big companies creating original video content and they want to get in on the fun. They have decided to create a new movie studio, but they don’t know anything about creating movies. You are charged with exploring what types of films are currently doing the best at the box office. You must then translate those findings into actionable insights that the head of Microsoft's new movie studio can use to help decide what type of films to create.
+   > #### What types of films are currently performing the best at the box office?
 
-### The Data
+* According to this [Holywood Reporter](https://www.hollywoodreporter.com/movies/movie-news/what-is-profitable-movie-ever-1269879/) article, we see that the metric used to determine performance of a movie at the box office may vary. Therefore, it is important to clarify that within this analysis, **the metric that shall be used to determine the success of a movie will be based on the return on investment (RoI) of the highest grossing films**. ROI is an important performance measure used by businesses to evaluate the profitability of an investment or compare the efficiency of a number of different investments.
 
-In the folder `zippedData` are movie datasets from:
+* In order to further understand the types of movies that are currently performing the best at the box office, this analysis will look into the impact following features have on the ROI:
 
-* [Box Office Mojo](https://www.boxofficemojo.com/)
-* [IMDB](https://www.imdb.com/)
-* [Rotten Tomatoes](https://www.rottentomatoes.com/)
-* [TheMovieDB](https://www.themoviedb.org/)
-* [The Numbers](https://www.the-numbers.com/)
+  * Runtime
 
-Because it was collected from various locations, the different files have different formats. Some are compressed CSV (comma-separated values) or TSV (tab-separated values) files that can be opened using spreadsheet software or `pd.read_csv`, while the data from IMDB is located in a SQLite database.
+  * Production Budget
 
-![movie data erd](https://raw.githubusercontent.com/learn-co-curriculum/dsc-phase-1-project-v2-4/master/movie_data_erd.jpeg)
+  * Gross Revenue
 
-Note that the above diagram shows ONLY the IMDB data. You will need to look carefully at the features to figure out how the IMDB data relates to the other provided data files.
+  * Release Date
 
-It is up to you to decide what data from this to use and how to use it. If you want to make this more challenging, you can scrape websites or make API calls to get additional data. If you are feeling overwhelmed or behind, we recommend you use only the following data files:
+  * Genre
 
-* `im.db.zip`
-  * Zipped SQLite database (you will need to unzip then query using SQLite)
-  * `movie_basics` and `movie_ratings` tables are most relevant
-* `bom.movie_gross.csv.gz`
-  * Compressed CSV file (you can open without expanding the file using `pd.read_csv`)
+  * Directors
 
-### Key Points
+  * Writers
 
-* **Your analysis should yield three concrete business recommendations.** The ultimate purpose of exploratory analysis is not just to learn about the data, but to help an organization perform better. Explicitly relate your findings to business needs by recommending actions that you think the business (Microsoft) should take.
+  * Rating
 
-* **Communicating about your work well is extremely important.** Your ability to provide value to an organization - or to land a job there - is directly reliant on your ability to communicate with them about what you have done and why it is valuable. Create a storyline your audience (the head of Microsoft's new movie studio) can follow by walking them through the steps of your process, highlighting the most important points and skipping over the rest.
+---
 
-* **Use plenty of visualizations.** Visualizations are invaluable for exploring your data and making your findings accessible to a non-technical audience. Spotlight visuals in your presentation, but only ones that relate directly to your recommendations. Simple visuals are usually best (e.g. bar charts and line graphs), and don't forget to format them well (e.g. labels, titles).
+### 2. Data Understanding
 
-## Deliverables
+* This analysis uses [datasets](./data/) obtained from two renowned movie websites:
 
-There are three deliverables for this project:
+  1. [The Numbers](https://www.the-numbers.com/) - `tn.movie_budgets.csv.gz`
 
-* A **non-technical presentation**
-* A **Jupyter Notebook**
-* A **GitHub repository**
+  2. [IMDB](https://www.imdb.com/) - `im.db.zip`
 
-### Non-Technical Presentation
+* From the [first dataset](data/tn.movie_budgets.csv.gz) which is in `.csv` format, we have the names, release dates, and monetary information of films that have been released and those are are yet to be released.With RoI being the target variable, the monetary data (production budget and worldwide gross) columns are the main reason this dataset was selected. Furthermore, the movie title and release date columns make this dataset an all round good starting point for the data preparation stage.
 
-The non-technical presentation is a slide deck presenting your analysis to business stakeholders.
+* From the [second dataset](data/im.db.zip) which is in `.db` format, we have database with 8 tables containing different types of non-monetary information about films such as their directors, writers, and genres, and the ratings and [more](images/imdb_data_erd.jpeg). This information will be used to understand the characteristics of the films that are currently performing the best at the box office.
 
-* ***Non-technical*** does not mean that you should avoid mentioning the technologies or techniques that you used, it means that you should explain any mentions of these technologies and avoid assuming that your audience is already familiar with them.
-* ***Business stakeholders*** means that the audience for your presentation is Microsoft, not the class or teacher. Do not assume that they are already familiar with the specific business problem, but also do not explain to them what Microsoft is.
+---
 
-The presentation describes the project ***goals, data, methods, and results***. It must include at least ***three visualizations*** which correspond to ***three business recommendations***.
+### 3. Methods
 
-We recommend that you follow this structure, although the slide titles should be specific to your project:
+* The process used to analyze the data in this project is as follows:
 
-1. Beginning
-    * Overview
-    * Business Understanding
-2. Middle
-    * Data Understanding
-    * Data Analysis
-3. End
-    * Recommendations
-    * Next Steps
-    * Thank You
-       * This slide should include a prompt for questions as well as your contact information (name and LinkedIn profile)
+  1. Narrow the [first dataset](data/tn.movie_budgets.csv.gz) down to the movies that have been released within the past ten years using the 'release_date' column. This is because we are looking for films that are **currently** performing the best.
 
-You will give a live presentation of your slides and submit them in PDF format on Canvas. The slides should also be present in the GitHub repository you submit with a file name of `presentation.pdf`.
+  2. Sort the DataFrame by the worldwide gross column in descending order and slice the first 200 rows. We shall be analysing the RoI based on the highest grossing films. Furthermore, narrowing the DataFrame to the top 200 records will ensure that the films selected have a gross that is around $300 million or more. This is a good worldwide gross for a film.
 
-The graded elements of the presentation are:
+  3. Create a new column in the DataFrame to store the RoI value that will be calculated by dividing the worldwide gross by the production budget and multiplying the result by 100 to represent the percentage.
 
-* Presentation Content
-* Slide Style
-* Presentation Delivery and Answers to Questions
+  4. Add more one-to-one features that will be used to classify the data. These feautres that we are looking to analyze are:
 
-See the [Grading](#grading) section for further explanation of these elements.
+       * Runtime
+  
+       * Genres
 
-For further reading on creating professional presentations, check out:
+       * Rating
+  
+      These features can be obtained by joining the `movie_basics` table by using the 'primary_title' column and `movie_ratings` table using the newly joined 'movie_id' column.
 
-* [Presentation Content](https://github.com/learn-co-curriculum/dsc-project-presentation-content)
-* [Slide Style](https://github.com/learn-co-curriculum/dsc-project-slide-design)
+  5. Clean the data by dropping the rows that have been joined to the wrong movie from the imdb datasets and those containing missing values.
+     * By evaluating the year values from the the 'release_date' column and the 'start_year' column that was joined from the `movie_basics` table, we can determine the records that have discrepancies and drop them.
+     * Drop the films that contain duplicate movie titles. Though it is possible for two multiple films to share a title, it is not a good idea to include them in the analysis as there is no way of verifying whether or not the information is correct.
+  
+  6. The last step would be to drop the columns that do not contain variables that we are interested in. These are: 'id', 'domestic_gross', 'primary_title', 'start_year', 'release_year', and 'numvotes'.
 
-### Jupyter Notebook
+* After performing this analysis we ended up with a DataFrame containing the following columns:
 
-The Jupyter Notebook is a notebook that uses Python and Markdown to present your analysis to a data science audience.
+  1. 'movie_id' - The unique identifier for each movie from the imdb dataset.
+  
+  2. 'release_date' - The release date of the film.
+  
+  3. 'movie' - The title of the film.
 
-* ***Python and Markdown*** means that you need to construct an integrated `.ipynb` file with Markdown (headings, paragraphs, links, lists, etc.) and Python code to create a well-organized, skim-able document.
-  * The notebook kernel should be restarted and all cells run before submission, to ensure that all code is runnable in order.
-  * Markdown should be used to frame the project with a clear introduction and conclusion, as well as introducing each of the required elements.
-* ***Data science audience*** means that you can assume basic data science proficiency in the person reading your notebook. This differs from the non-technical presentation.
+  4. 'production_budget' - The production budget of the film.
 
-Along with the presentation, the notebook also describes the project ***goals, data, methods, and results***. It must include at least ***three visualizations*** which correspond to ***three business recommendations***.
+  5. 'worldwide_gross' - The worldwide gross of the film.
+  
+  6. 'RoI' - The return on investment of the film.
+  
+  7. 'runtime_minutes' - The length of the film in minutes.
 
-You will submit the notebook in PDF format on Canvas as well as in `.ipynb` format in your GitHub repository.
+  8. 'genres' - The genres of the film.
+  
+  9. 'averagerating' - The average rating of the film.
 
-The graded elements for the Jupyter Notebook are:
+  The approach chosen to prepare the data is appropriate as it enables for the analysis of the target variable (RoI) against the non-monetary features making it easier to get insights.
 
-* Business Understanding
-* Data Understanding
-* Data Preparation
-* Data Analysis
-* Visualization
-* Code Quality
+  The other features such as 'directors', 'writers' will be implented in the in analysis phase in separeate DataFrames each since they contain one-to-many relationships. That would have made the analysis more difficult.
 
-See the [Grading](#grading) section for further explanation of these elements.
+---
 
-### GitHub Repository
+### 4. Results
 
-The GitHub repository is the cloud-hosted directory containing all of your project files as well as their version history.
+* For the analysis phase we chose our primary target variable, RoI, and analyzed the rest of the featues against it:
 
-This repository link will be the project link that you include on your resume, LinkedIn, etc. for prospective employers to view your work. Note that we typically recommend that 3 links are highlighted (out of 5 projects) so don't stress too much about getting this one to be perfect! There will also be time after graduation for cosmetic touch-ups.
+  1. **Runtime** - The goal was to identify the whether the length of a film has any impact on the return on investment. After plotting the [scatter plot](images/runtime_vs_roi.png) of the runtime against the RoI, we see that runtime has not direct impact on the return on investment of a film. This coupled with the Pearson correlation coefficient of -0.1 which closer to 0, indicating that the runtime does not have any impact on the return on investment of a film. ![runtime_vs_RoI](images/runtime_vs_roi.png)
 
-A professional GitHub repository has:
+  2. **Production Budget** - The aim of this analysis was to identify whether spending more money on the production a film results in a higher return on investment. From the [scatter plot](images/production_budget_vs_roi.png) used, we see that there is a negative correlation between the production budget and the RoI. However, this relationship is not linear. From 0 to 100 million dollars, the correlation is negative. However, from 100 to 300 million dollars, there is no distict correlation between the return on investment and the production budget. Looking at the Pearson correlation coefficient, we see that the correlation coefficient (-0.6) suggests a moderately negative relationship between the return on investment and the production budget which confirms what we see on the scatter plot. Therefore, the more the money spent on the production of a film, the return on investment generally less. ![production_budget_vs_RoI](images/production_budget_vs_roi.png)
+  
+  3. **Worldwide Gross** - The aim of this analysis was to identify whether there is a relationship between films the gross the highest and the return on investment. From the [scatter plot](images/worldwide_gross_vs_roi.png) used, there is no distinct relationship between the worldwide gross and the RoI. Looking at the Pearson correlation coefficient, we see that the correlation coefficient (0.15) is closer to 0 therefore suggesting that the worldwide gross of a film has no impact on its RoI. ![worldwide_gross_vs_RoI](images/worldwide_gross_vs_roi.png)
 
-1. `README.md`
-    * A file called `README.md` at the root of the repository directory, written in Markdown; this is what is rendered when someone visits the link to your repository in the browser
-    * This file contains these sections:
-       * Overview
-       * Business Understanding
-          * Include stakeholder and key business questions
-       * Data Understanding and Analysis
-          * Source of data
-          * Description of data
-          * Three visualizations (the same visualizations presented in the slides and notebook)
-       * Conclusion
-          * Summary of conclusions including three relevant findings
-2. Commit history
-   * Progression of updates throughout the project time period, not just immediately before the deadline
-   * Clear commit messages
-   * Commits from all team members (if a group project)
-3. Organization
-   * Clear folder structure
-   * Clear names of files and folders
-   * Easily-located notebook and presentation linked in the README
-4. Notebook(s)
-   * Clearly-indicated final notebook that runs without errors
-   * Exploratory/working notebooks (can contain errors, redundant code, etc.) from all team members (if a group project)
-5. `.gitignore`
-   * A file called `.gitignore` at the root of the repository directory instructs Git to ignore large, unnecessary, or private files
-     * Because it starts with a `.`, you will need to type `ls -a` in the terminal in order to see that it is there
-   * GitHub maintains a [Python .gitignore](https://github.com/github/gitignore/blob/master/Python.gitignore) that may be a useful starting point for your version of this file
-   * To tell Git to ignore more files, just add a new line to `.gitignore` for each new file name
-     * Consider adding `.DS_Store` if you are using a Mac computer, as well as project-specific file names
-     * If you are running into an error message because you forgot to add something to `.gitignore` and it is too large to be pushed to GitHub [this blog post](https://medium.com/analytics-vidhya/tutorial-removing-large-files-from-git-78dbf4cf83a?sk=c3763d466c7f2528008c3777192dfb95)(friend link) should help you address this
+  4. **Release Date** - The aim of this analysis was to identify the impact that time of release has on the return on investment of a film. This analysis was split into parts: Month and Season. The analysis by month showed that films released in September averagely yield a higher RoI, however, after looking at the film distribution, we see that the distribution was not even and may perhaps be the reason as to why September which had fewer films than most avereaged a higher RoI. ![avg_roi_per_month](images/avg_roi_per_month.png)  ![films_released_per_month](images/films_released_per_month.png) The analysis per season shows that the highest return on investment is achieved in the Fall season, however, since the Fall season had the lowest number of films, we see that it isn't an accurate season to consider. When we look at the Summer season though, we see that it had a comparable RoI to the Fall season despite having the most films released. This therefore suggests that films released in the Summer are the best performing. ![avg_roi_per_season](images/avg_roi_per_season.png) ![films_released_per_season](images/films_released_per_season.png)
 
-You wil submit a link to the GitHub repository on Canvas.
+  5. **Genres** - The aim of this analysis was to identify the genre that produces the highest RoI. From the barplot used, we see that the genre that produces the highest RoI is Horror followed by Music. However, when we look at the number of films per genre, we can see that the distribution of the genre of films in the dataset is not even. Therefore, we need to take this into account that the reason that the 'Horror' and 'Music' genre have a higher average return on investment may be because there are fewer films classified under them. It is however important to note that of the Top 200 Highest Grossing Films that were originally selected, majority of were Adventure and Action. This suggests that Adventure and Action films averagely make the most money. As a result, this makes it difficult to derive any definate conclusion as to what genre yields the highest average RoI. ![avg_roi_per_genre](images/avg_roi_per_genre.png) ![films_released_per_genre](images/films_released_per_genre.png)
 
-See the [Grading](#grading) section for further explanation of how the GitHub repository will be graded.
+  6. **Directors** - The aim of this analysis was to identify the directors with the highest average RoI for the films that they have directed. We only focused on the directors who had multiple films within the prepared dataset. From the [plot](images/avg_roi_per_director.png), we can see that films directed by Kyle Balda, Pierre Coffin, Chris Rennaud, David F. Sandberg, and James Wan produced the highest return on investment ![avg_roi_per_director](./images/avg_roi_per_director.png)
 
-For further reading on creating professional notebooks and `README`s, check out [this reading](https://github.com/learn-co-curriculum/dsc-repo-readability-v2-2).
+  7. **Writers** - The aim of this analysis was to identify the writers with the highest average RoI for the films that they have written. We only focused on the writers who have written multiple films within the prepared dataset. From our [plot](images/avg_roi_per_writer.png) we can see that films written by Gary Dauberman produced the highest return on investment.![avg_roi_per_writer](./images/avg_roi_per_writer.png)
 
-## Grading
+  8. **Rating** - The aim of this final analysis was to identify the impact that return on investment has on the rating of a film. From the [scatter plot](images/rating_vs_roi.png), it is difficult to see any distinct relationship between the rating and the RoI. However, looking at the Pearson correlation coefficient (0.15), we see that it is closer to 0 therefore confirming that there is indeed no relationship between the rating of a film and the RoI. ![rating_vs_roi](images/rating_vs_roi.png)
 
-***To pass this project, you must pass each project rubric objective.*** The project rubric objectives for Phase 1 are:
+---
 
-1. Attention to Detail
-2. Data Communication
-3. Authoring Jupyter Notebooks
-4. Data Manipulation and Analysis with `pandas`
+### 5. Conclusions
 
-### Attention to Detail
+* This analysis leads to the following recommendations for the types of films that are the best performing in the box office:
 
-If you have searched for a job, you have probably seen "attention to detail" appear on a job description. In a [survey of hiring managers](https://www.payscale.com/data-packages/job-skills), fully 56% of them said they felt that recent college grads lacked this skill. So, what does "attention to detail" mean, and how will you be graded on it at Flatiron School?
+  1. **The length of a film (Runtime) of a film has no impact on its box ofice performance.**
 
-Attention to detail means that you accomplish tasks thoroughly and accurately. You need to understand what is being asked of you, and double-check that your work fulfills all of the requirements. This will help make you a "no-brainer hire" because it helps employers feel confident that they will not have to double-check your work. For further reading, check out [this article](https://www.indeed.com/career-advice/career-development/attention-to-detail) from Indeed.
+  2. **The Production Budget of a film has a modereately negative correlation with its return on investment.**
 
-***Attention to detail will be graded based on the project checklist. In Phase 1, you need to complete 60% (6 out of 10) or more of the checklist elements in order to pass the Attention to Detail objective.*** The standard for passing the Attention to Detail objective will increase with each Phase, until you are required to complete all elements to pass Phase 5 (Capstone).
+  3. **The Worldwide Gross of a film has no impact on its return on investment.**
+  
+  4. **Movies released in the Summer are more likely to yield a higher return on investment**. Though September (Fall) had the highest average return on investment, the number of films released was significantly less than other months. Therefore, it would not have been an accurate measure to determine the optimal time to release a film.
+  
+  5. **'Horror' and 'Music' genres are more likely to have a higher return on investment.**. It is however important to note that 'Action' and 'Adventure' films are the top most grossing.
+  
+  6. **Films directed by Kyle Balda, Pierre Coffin, Chris Rennaud, David F. Sandberg, and James Wan produce the highest return on investment.**
+  
+  7. **Films written by Gary Dauberman produce the highest return on investment.**
+  
+  8. **Success of a film is not determinant on the films rating**
 
-The [Phase 1 Project Checklist](https://docs.google.com/document/d/1PjJwdek9EeIy9tYdvlC4bvKvwYcI2xHO1wEMENfqo5E/edit?usp=sharing) is linked here as well as directly in Canvas. The elements highlighted in yellow are the elements you need to complete in order to pass this objective. We recommend that you make your own copy of this document, so that you can check off each element as you complete it. The checklist also contains more specific, detailed guidance about the deliverables described above.
+* This analysis may not fully solve the business problem because there are other factors which affect the performace of a film such from data that was not available during for this analysis (for example, the amount of money that is spent for the film's marketing), as well as other unpredictable circumstances going on in the world (pandemics, economic downturns, war, etc).
 
-Below are the definitions of each rubric level for this objective. This information is also summarized in the rubric, which is attached to the project submission assignment.
+* In order to further improve this analysis, we would need to look at more financial data such as the amount of money that is spent for the marketing, social impact of the films as well as the main cast of the films.
 
-#### Exceeds Objective
-70% or more of the project checklist items are complete
+---
+---
 
-#### Meets Objective (Passing Bar)
-60% of the project checklist items are complete
+## Repository Structure
 
-#### Approaching Objective
-50% of the project checklist items are complete
+* The repository is structured as follows:
 
-#### Does Not Meet Objective
-40% or fewer of the project checklist items are complete
+```
+├── README.md                            <- The top-level README for reviewers of this project
+├── .gitignore                           <- The .gitignore file for the project
+├── LICENSE.md                           <- The license for the project
+├── index.ipynb                          <- Narrative documentation of analysis in Jupyter Notebook
+├── presentation.pdf                     <- Presentation of analysis in PDF format
+├── write-up.pdf                         <- Write-up of analysis in PDF format
+└── data                                 <- Datasets used in the analysis
+|    ├── tn.movie_budgets.csv.gz
+|    └── im.db.zip
+|
+└── images                               <- Images sourced externally and from the code
+   
 
-### Data Communication
+```
 
-Communication is another key "soft skill". In [the same survey mentioned above](https://www.payscale.com/data-packages/job-skills), 46% of hiring managers said that recent college grads were missing this skill.
+---
 
-Because "communication" can encompass such a wide range of contexts and skills, we will specifically focus our Phase 1 objective on Data Communication. We define Data Communication as:
+## Technologies Used
+* Python
+* Pandas
+* NumPy
+* Matplotlib
+* Seaborn
+* SQLite3
+  
 
-> Communicating basic data analysis results to diverse audiences via writing and live presentation
+---
+## For More Information
 
-To further define some of these terms:
-
-* By "basic data analysis" we mean that you are filtering, sorting, grouping, and/or aggregating the data in order to answer business questions. This project does not involve inferential statistics or machine learning, although descriptive statistics such as measures of central tendency are encouraged.
-* By "results" we mean your ***three visualizations and recommendations***.
-* By "diverse audiences" we mean that your presentation and notebook are appropriately addressing a business and data science audience, respectively.
-
-Below are the definitions of each rubric level for this objective. This information is also summarized in the rubric, which is attached to the project submission assignment.
-
-#### Exceeds Objective
-Creates and describes appropriate visualizations for given business questions, where each visualization fulfills all elements of the checklist
-
-> This "checklist" refers to the Data Visualization checklist within the larger Phase 1 Project Checklist
-
-#### Meets Objective (Passing Bar)
-Creates and describes appropriate visualizations for given business questions
-
-> This objective can be met even if all checklist elements are not fulfilled. For example, if there is some illegible text in one of your visualizations, you can still meet this objective
-
-#### Approaching Objective
-Creates visualizations that are not related to the business questions, or uses an inappropriate type of visualization
-
-> Even if you create very compelling visualizations, you cannot pass this objective if the visualizations are not related to the business questions
-
-> An example of an inappropriate type of visualization would be using a line graph to show the correlation between two independent variables, when a scatter plot would be more appropriate
-
-#### Does Not Meet Objective
-Does not submit the required number of visualizations
-
-### Authoring Jupyter Notebooks
-
-According to [Kaggle's 2020 State of Data Science and Machine Learning Survey](https://www.kaggle.com/kaggle-survey-2020), 74.1% of data scientists use a Jupyter development environment, which is more than twice the percentage of the next-most-popular IDE, Visual Studio Code. Jupyter Notebooks allow for reproducible, skim-able code documents for a data science audience. Comfort and skill with authoring Jupyter Notebooks will prepare you for job interviews, take-home challenges, and on-the-job tasks as a data scientist.
-
-The key feature that distinguishes *authoring Jupyter Notebooks* from simply *writing Python code* is the fact that Markdown cells are integrated into the notebook along with the Python cells in a notebook. You have seen examples of this throughout the curriculum, but now it's time for you to practice this yourself!
-
-Below are the definitions of each rubric level for this objective. This information is also summarized in the rubric, which is attached to the project submission assignment.
-
-#### Exceeds Objective
-Uses Markdown and code comments to create a well-organized, skim-able document that follows all best practices
-
-> Refer to the [repository readability reading](https://github.com/learn-co-curriculum/dsc-repo-readability-v2-2) for more tips on best practices
-
-#### Meets Objective (Passing Bar)
-Uses some Markdown to create an organized notebook, with an introduction at the top and a conclusion at the bottom
-
-#### Approaching Objective
-Uses Markdown cells to organize, but either uses only headers and does not provide any explanations or justifications, or uses only plaintext without any headers to segment out sections of the notebook
-
-> Headers in Markdown are delineated with one or more `#`s at the start of the line. You should have a mixture of headers and plaintext (text where the line does not start with `#`)
-
-#### Does Not Meet Objective
-Does not submit a notebook, or does not use Markdown cells at all to organize the notebook
-
-### Data Manipulation and Analysis with `pandas`
-
-`pandas` is a very popular data manipulation library, with over 2 million downloads on Anaconda (`conda install pandas`) and over 19 million downloads on PyPI (`pip install pandas`) at the time of this writing. In our own internal data, we see that the overwhelming majority of Flatiron School DS grads use `pandas` on the job in some capacity.
-
-Unlike in base Python, where the Zen of Python says "There should be one-- and preferably only one --obvious way to do it", there is often more than one valid way to do something in `pandas`. However there are still more efficient and less efficient ways to use it. Specifically, the best `pandas` code is *performant* and *idiomatic*.
-
-Performant `pandas` code utilizes methods and broadcasting rather than user-defined functions or `for` loops. For example, if you need to strip whitespace from a column containing string data, the best approach would be to use the [`pandas.Series.str.strip` method](https://pandas.pydata.org/docs/reference/api/pandas.Series.str.strip.html) rather than writing your own function or writing a loop. Or if you want to multiply everything in a column by 100, the best approach would be to use broadcasting (e.g. `df["column_name"] * 100`) instead of a function or loop. You can still write your own functions if needed, but only after checking that there isn't a built-in way to do it.
-
-Idiomatic `pandas` code has variable names that are meaningful words or abbreviations in English, that are related to the purpose of the variables. You can still use `df` as the name of your DataFrame if there is only one main DataFrame you are working with, but as soon as you are merging multiple DataFrames or taking a subset of a DataFrame, you should use meaningful names. For example, `df2` would not be an idiomatic name, but `movies_and_reviews` could be.
-
-We also recommend that you rename all DataFrame columns so that their meanings are more understandable, although it is fine to have acronyms. For example, `"col1"` would not be an idiomatic name, but `"USD"` could be.
-
-Below are the definitions of each rubric level for this objective. This information is also summarized in the rubric, which is attached to the project submission assignment.
-
-#### Exceeds Objective
-Uses `pandas` to prepare data and answer business questions in an idiomatic, performant way
-
-#### Meets Objective (Passing Bar)
-Successfully uses `pandas` to prepare data in order to answer business questions
-
-> This includes projects that _occasionally_ use base Python when `pandas` methods would be more appropriate (such as using `enumerate()` on a DataFrame), or occasionally performs operations that do not appear to have any relevance to the business questions
-
-#### Approaching Objective
-Uses `pandas` to prepare data, but makes significant errors
-
-> Examples of significant errors include: the result presented does not actually answer the stated question, the code produces errors, the code _consistently_ uses base Python when `pandas` methods would be more appropriate, or the submitted notebook contains significant quantities of code that is unrelated to the presented analysis (such as copy/pasted code from the curriculum or StackOverflow)
-
-#### Does Not Meet Objective
-Unable to prepare data using `pandas`
-
-> This includes projects that successfully answer the business questions, but do not use `pandas` (e.g. use only base Python, or use some other tool like R, Tableau, or Excel)
-
-## Getting Started
-
-Please start by reviewing the contents of this project description. If you have any questions, please ask your instructor ASAP.
-
-Next, you will need to complete the [***Project Proposal***](#project_proposal) which must be reviewed by your instructor before you can continue with the project.
-
-Then, you will need to create a GitHub repository. There are three options:
-
-1. Look at the [Phase 1 Project Templates and Examples repo](https://github.com/learn-co-curriculum/dsc-project-template) and follow the directions in the MVP branch.
-2. Fork the [Phase 1 Project Repository](https://github.com/learn-co-curriculum/dsc-phase-1-project-v2-4), clone it locally, and work in the `student.ipynb` file. Make sure to also add and commit a PDF of your presentation to your repository with a file name of `presentation.pdf`.
-3. Create a new repository from scratch by going to [github.com/new](https://github.com/new) and copying the data files from one of the above resources into your new repository. This approach will result in the most professional-looking portfolio repository, but can be more complicated to use. So if you are getting stuck with this option, try one of the above options instead.
-
-## Summary
-
-This project will give you a valuable opportunity to develop your data science skills using real-world data. The end-of-phase projects are a critical part of the program because they give you a chance to bring together all the skills you've learned, apply them to realistic projects for a business stakeholder, practice communication skills, and get feedback to help you improve. You've got this!
+* Please review the full analysis in the [Jupyter Notebook](/student.ipynb) or the [Presentation](/presentation.pdf).
